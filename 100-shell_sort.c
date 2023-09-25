@@ -1,87 +1,50 @@
 #include "sort.h"
 
 /**
- * swap_nodes - Swap two nodes in a list.
- * @a: Pointer to the first node.
- * @b: Pointer to the second node.
+ * switch_values - Interchange two integer values in an array.
+ * @x: Pointer to the first integer.
+ * @y: Pointer to the second integer.
  */
-void swap_nodes(listint_t *a, listint_t *b)
+void switch_values(int *x, int *y)
 {
-	listint_t *temp_prev, *temp_next;
+	int temp_val;
 
-	temp_prev = a->prev;
-	temp_next = b->next;
-
-	/* Handling adjacent nodes case */
-	if (a->next == b)
-	{
-		if (temp_prev)
-			temp_prev->next = b;
-		b->prev = temp_prev;
-		a->prev = b;
-		b->next = a;
-		a->next = temp_next;
-		if (temp_next)
-			temp_next->prev = a;
-	}
-	else
-	{
-		a->prev = b->prev;
-		a->next = b->next;
-		b->prev = temp_prev;
-		b->next = temp_next;
-		if (a->prev)
-			a->prev->next = a;
-		if (a->next)
-			a->next->prev = a;
-		if (b->prev)
-			b->prev->next = b;
-		if (b->next)
-			b->next->prev = b;
-	}
+	temp_val = *x;
+	*x = *y;
+	*y = temp_val;
 }
 
 /**
- * cocktail_sort_list - Sort a doubly-linked list of integers using
- *                      the cocktail sort algorithm.
- * @list: A pointer to the head of the doubly-linked list.
+ * shell_sort - Organize an array of integers in increasing order
+ *              leveraging the shell sort method.
+ * @array: Pointer to the array of integers.
+ * @size: The count of items in the array.
+ *
+ * Description: Employs the Knuth interval sequence.
  */
-void cocktail_sort_list(listint_t **list)
+void shell_sort(int *array, size_t size)
 {
-	listint_t *current;
-	int swapped = 1;
+	size_t interval, outer, inner;
 
-	if (!list || !*list || !(*list)->next)
+	if (!array || size < 2)
 		return;
 
-	while (swapped)
-	{
-		swapped = 0;
-		for (current = *list; current && current->next; current = current->next)
-		{
-			if (current->n > current->next->n)
-			{
-				swap_nodes(current, current->next);
-				swapped = 1;
-				if (!current->prev)
-					*list = current;
-				print_list(*list);
-			}
-		}
-		if (!swapped)
-			break;
+	for (interval = 1; interval <= size / 3;)
+		interval = interval * 3 + 1;
 
-		swapped = 0;
-		for (; current && current->prev; current = current->prev)
+	while (interval > 0)
+	{
+		for (outer = interval; outer < size; outer++)
 		{
-			if (current->n < current->prev->n)
+			inner = outer;
+			while (inner >= interval && array[inner - interval] > array[inner])
 			{
-				swap_nodes(current->prev, current);
-				swapped = 1;
-				if (!current->prev)
-					*list = current;
-				print_list(*list);
+				switch_values(&array[inner], &array[inner - interval]);
+				inner -= interval;
 			}
 		}
+		print_array(array, size);
+		interval /= 3;
 	}
 }
+
