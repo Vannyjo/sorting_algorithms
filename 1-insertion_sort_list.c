@@ -6,19 +6,19 @@
  * @n1: A pointer to the first node to swap.
  * @n2: The second node to swap.
  */
-void swap_nodes(listint_t **h, listint_t **n1, listint_t *n2)
+void swap_nodes(listint_t **head, listint_t **no1, listint_t *no2)
 {
-	(*n1)->next = n2->next;
-	if (n2->next != NULL)
-		n2->next->prev = *n1;
-	n2->prev = (*n1)->prev;
-	n2->next = *n1;
-	if ((*n1)->prev != NULL)
-		(*n1)->prev->next = n2;
+	(*no1)->next = no2->next;
+	if (no2->next != NULL)
+		no2->next->prev = *no1;
+	no2->prev = (*no1)->prev;
+	no2->next = *no1;
+	if ((*no1)->prev != NULL)
+		(*no1)->prev->next = no2;
 	else
-		*h = n2;
-	(*n1)->prev = n2;
-	*n1 = n2->prev;
+		*head = no2;
+	(*no1)->prev = no2;
+	*no1 = no2->prev;
 }
 
 /**
